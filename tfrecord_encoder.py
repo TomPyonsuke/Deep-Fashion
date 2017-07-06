@@ -183,7 +183,6 @@ def _dataset_exists(dataset_dir):
        return False
   return True
 
-
 def run(dataset_dir):
   """Runs the download and conversion operation.
 
@@ -195,7 +194,7 @@ def run(dataset_dir):
 
   if _dataset_exists(dataset_dir):
     print('Dataset files already exist. Exiting without re-creating them.')
-    return
+    #return
 
   train_files, train_labels, val_files, \
   val_labels, test_files, test_labels = _get_filenames_and_labels(dataset_dir)

@@ -14,8 +14,9 @@ slim = tf.contrib.slim
 _FILE_PATTERN = '%s-*'
 
 _SPLITS_TO_SIZES = {
-    'train': 1000,
-    'validation': 1000,
+    'train': 209222,
+    'validation': 40000,
+    'test': 40000,
 }
 
 _ITEMS_TO_DESCRIPTIONS = {

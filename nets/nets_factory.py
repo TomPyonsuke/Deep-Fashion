@@ -22,6 +22,8 @@ import functools
 import tensorflow as tf
 from nets import lenet
 from nets import vgg
+from nets import resnet_v1
+from nets import ssd_vgg_300
 
 slim = tf.contrib.slim
 
@@ -29,14 +31,24 @@ networks_map = {'vgg_a': vgg.vgg_a,
                 'vgg_16': vgg.vgg_16,
                 'vgg_19': vgg.vgg_19,
                 'lenet': lenet.lenet,
+                'resnet': resnet_v1.resnet_v1_50,
                }
 
 arg_scopes_map = {'vgg_a': vgg.vgg_arg_scope,
                   'vgg_16': vgg.vgg_arg_scope,
                   'vgg_19': vgg.vgg_arg_scope,
                   'lenet': lenet.lenet_arg_scope,
+                  'resnet': resnet_v1.resnet_arg_scope,
                  }
 
+networks_obj = {'ssd_300_vgg': ssd_vgg_300.SSDNet,
+                }
+
+def get_network(name):
+    """Get a network object from a name.
+    """
+    # params = networks_obj[name].default_params if params is None else params
+    return networks_obj[name]
 
 def get_network_fn(name, num_classes, weight_decay=0.0, is_training=False):
   """Returns a network_fn such as `logits, end_points = network_fn(images)`.

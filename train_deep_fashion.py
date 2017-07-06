@@ -396,14 +396,17 @@ def main(_):
           num_readers=FLAGS.num_readers,
           common_queue_capacity=20 * FLAGS.batch_size,
           common_queue_min=10 * FLAGS.batch_size)
-      [image, label, bbox] = provider.get(['image', 'label', 'object/bbox'])
-      bbox = tf.expand_dims(bbox, 0)
+      [image, label] = provider.get(['image', 'label'])
+      #[image, label, bbox] = provider.get(['image', 'label', 'object/bbox'])
+      #bbox = tf.expand_dims(bbox, 0)
       label -= FLAGS.labels_offset
 
       train_image_size = FLAGS.train_image_size or network_fn.default_image_size
 
       image = preprocessing.preprocess_image(image, train_image_size, train_image_size,
-                                             is_training=True, bbox=bbox)
+                                             is_training=True)
+      #image = preprocessing.preprocess_image(image, train_image_size, train_image_size,
+                                             #is_training=True, bbox=bbox)
 
       images, labels = tf.train.batch(
           [image, label],

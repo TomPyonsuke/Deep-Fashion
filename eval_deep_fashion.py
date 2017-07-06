@@ -89,13 +89,15 @@ def main(_):
         shuffle=False,
         common_queue_capacity=2 * FLAGS.batch_size,
         common_queue_min=FLAGS.batch_size)
-    [image, label, bbox] = provider.get(['image', 'label', 'object/bbox'])
-    bbox = tf.expand_dims(bbox, 0)
+    [image, label] = provider.get(['image', 'label'])
+    #[image, label, bbox] = provider.get(['image', 'label', 'object/bbox'])
+    #bbox = tf.expand_dims(bbox, 0)
     label -= FLAGS.labels_offset
 
     eval_image_size = FLAGS.eval_image_size or network_fn.default_image_size
 
-    image = preprocessing.preprocess_image(image, eval_image_size, eval_image_size, bbox=bbox)
+    image = preprocessing.preprocess_image(image, eval_image_size, eval_image_size)
+    #image = preprocessing.preprocess_image(image, eval_image_size, eval_image_size, bbox=bbox)
 
     images, labels = tf.train.batch(
         [image, label],
@@ -123,6 +125,8 @@ def main(_):
     # Define the metrics:
     names_to_values, names_to_updates = slim.metrics.aggregate_metric_map({
         'Accuracy': slim.metrics.streaming_accuracy(predictions, labels),
+        'Recall_3': slim.metrics.streaming_recall_at_k(
+            logits, labels, 3),
         'Recall_5': slim.metrics.streaming_recall_at_k(
             logits, labels, 5),
     })
